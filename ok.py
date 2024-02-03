@@ -22,7 +22,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
 import sqlite3
 import datetime
-
+from pywinauto import Application
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -418,14 +418,13 @@ class Ui_MainWindow(object):
         active_window = gw.getActiveWindow()
         if active_window is not None:
             app_name = active_window.title
-
+            
             if app_name != 'Main Window':  # Exclude details about the PyQt window
                 if "Google Chrome" in app_name or "Firefox" in app_name or "Microsoft​ Edge" in app_name:
-                    tab_name = self.get_browser_tab_name(active_window)
-                elif "Visual" in app_name:
-                    tab_name = "Visual Studio"
+                    tab_name = self.get_browser_tab_name(active_window)        
                 else:
-                    tab_name = app_name
+                    tab_name = app_name.split("-")[-1]
+                    tab_name=tab_name.strip()
 
                 cursor = self.conn.cursor()
                 cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=?", (tab_name,))
@@ -443,32 +442,42 @@ class Ui_MainWindow(object):
         title = window.title
         
         if " - Google Chrome" in title:
-            tab_name = title.split(" - Google Chrome")[0]
-            if "- YouTube" in tab_name:
-                tab_name = "YouTube" 
-            elif "Chats" in tab_name or "Instagram" in tab_name:
-                tab_name = "Instagram" 
-            elif "Messenger" in tab_name or "Facebook" in tab_name:
-                tab_name = "Facebook"    
-            return tab_name
+            if "- YouTube" in title:
+                tab_name="Youtube"
+                return tab_name
+            else:    
+                app = Application(backend='uia')
+                app.connect(title_re=".*Chrome.*", found_index=0)
+                element_name="Address and search bar"
+                dlg = app.top_window()
+                url = dlg.child_window(title=element_name, control_type="Edit").get_value()
+                tab_name= url.split(".com")[0]
+                return tab_name
         elif " - Mozilla Firefox" in title:
-            tab_name = title.split(" - Mozilla Firefox")[0]
-            if "- YouTube" in tab_name:
-                tab_name = "YouTube" 
-            elif "Chats" in tab_name or "Instagram" in tab_name:
-                tab_name = "Instagram" 
-            elif "Messenger" in tab_name or "Facebook" in tab_name:
-                tab_name = "Facebook"      
-            return tab_name
+            if "- YouTube" in title:
+                tab_name="Youtube"
+                return tab_name
+            else:    
+                app = Application(backend='uia')
+                app.connect(title_re=".*Chrome.*", found_index=0)
+                element_name="Address and search bar"
+                dlg = app.top_window()
+                url = dlg.child_window(title=element_name, control_type="Edit").get_value()
+                tab_name= url.split(".com")[0]
+                return tab_name
         elif "Edge" in title:
-            tab_name = title.split(" - Microsoft Edge")[0]
-            if "- YouTube" in tab_name: 
-                tab_name = "YouTube" 
-            elif "Chats" in tab_name or "Instagram" in tab_name:
-                tab_name = "Instagram" 
-            elif "Messenger" in tab_name or "Facebook" in tab_name:
-                tab_name = "Facebook"       
-            return tab_name
+            if "- YouTube" in title:
+                tab_name="Youtube"
+                return tab_name
+            else:    
+                app = Application(backend='uia')
+                app.connect(title_re=".*Microsoft​ Edge.*", found_index=0)
+                dlg = app.top_window()
+                wrapper = dlg.child_window(title="App bar", control_type="ToolBar")
+                url = wrapper.descendants(control_type='Edit')[0]
+                tab_name=(url.get_value()).split("www.")[1]
+                tab_name=tab_name.split(".com")[0]
+                return tab_name
         elif "- Visual Studio Code" in title:
                 title="Visual Studio Code"
                 return title
