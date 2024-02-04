@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>586</width>
-    <height>510</height>
+    <width>733</width>
+    <height>538</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -436,9 +436,9 @@ background-color:rgb(5, 171, 232	);
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
-           <widget class="QFrame" name="pie_chart_frame">
+           <widget class="QFrame" name="calendar_frame">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
+             <string notr="true">background-color: transparent;
 border-radius:7px;</string>
             </property>
             <property name="frameShape">
@@ -447,18 +447,31 @@ border-radius:7px;</string>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <widget class="QCalendarWidget" name="calendarWidget">
+               <property name="styleSheet">
+                <string notr="true">color: rgb(85, 255, 255);
+font-size:28px;
+font-weight:700;
+font-family: 'Istok Web';
+alternate-background-color: rgb(0, 0, 0);</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QFrame" name="bar_graph_frame">
-            <property name="minimumSize">
+           <widget class="QFrame" name="task_frame">
+            <property name="maximumSize">
              <size>
-              <width>0</width>
-              <height>200</height>
+              <width>550</width>
+              <height>16777215</height>
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
+             <string notr="true">background-color: transparent;
 border-radius:7px;</string>
             </property>
             <property name="frameShape">
@@ -467,20 +480,121 @@ border-radius:7px;</string>
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-           </widget>
-          </item>
-          <item row="1" column="0" colspan="2">
-           <widget class="QFrame" name="line_graph_frame">
-            <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 255);
-border-radius:7px;</string>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Raised</enum>
-            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="QPushButton" name="addButton">
+               <property name="minimumSize">
+                <size>
+                 <width>10</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>150</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="baseSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(85, 255, 255);
+
+
+
+
+
+font-family: 'Istok Web';
+font-style: normal;
+font-weight: 700;
+font-size:12 px;
+color:#071e26;
+border-radius:5px
+
+
+</string>
+               </property>
+               <property name="text">
+                <string>Add New</string>
+               </property>
+               <property name="autoDefault">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLineEdit" name="lineEdit">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Istok Web</family>
+                 <pointsize>-1</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(255, 255, 255);
+color:black;
+font-family: 'Istok Web';
+border-radius:5px;
+letter-spacing:1px;
+font-size:18px;
+padding-left:4px;
+font-weight:400;</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QListWidget" name="tasksListWidget">
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(255, 255, 255);
+color: black;
+font-family: 'Istok Web';
+font-size:24px;
+font-weight:500;</string>
+               </property>
+               <item>
+                <property name="text">
+                 <string>hello</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QPushButton" name="saveButton">
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(85, 255, 255);
+
+
+
+
+
+font-family: 'Istok Web';
+font-style: normal;
+font-weight: 700;
+font-size:12 px;
+color:#071e26;
+
+
+
+</string>
+               </property>
+               <property name="text">
+                <string>Save Changes</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>

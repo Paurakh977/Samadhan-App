@@ -10,8 +10,13 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
-class Ui_MainWindow(object):
+import signup
+class login_window(object):
+    def open_signup(self):
+            self.window=QtWidgets.QMainWindow()
+            self.ui=signup.signup_window()
+            self.ui.setupUi(self.window)
+            self.window.show()   
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1484, 1726)
@@ -158,7 +163,7 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-
+        self.signup.clicked.connect(self.open_signup)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -171,6 +176,7 @@ class Ui_MainWindow(object):
         self.Login_button.setText(_translate("MainWindow", "Login"))
         self.label_2.setText(_translate("MainWindow", "Welcome"))
         self.username.setPlaceholderText(_translate("MainWindow", "Username"))
+            
 import stripes_rc
 
 
@@ -178,7 +184,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
+    ui = login_window()
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
