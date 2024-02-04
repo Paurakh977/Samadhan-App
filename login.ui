@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1484</width>
+    <height>1726</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QFrame" name="frame">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="maximumSize">
+          <size>
+           <width>600</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">
+background-image: url(:/newPrefix/leaf.png);
+border-radius:5px;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="../Feb-7 Project/PyQT/Login and Sign up/stripes.qrc">:/newPrefix/leaf.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="minimumSize">
+          <size>
+           <width>650</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>900</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">margin-left:100px;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <widget class="QPushButton" name="login_page">
+              <property name="styleSheet">
+               <string notr="true"> font-family: 'Istok Web';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 34px;
+            line-height: 38px;
+            color: #5F7C8D;
+background-color: transparent;</string>
+              </property>
+              <property name="text">
+               <string>Login</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="styleSheet">
+               <string notr="true">position: absolute;
+            width: 90px;
+            height: 0px;
+            left: -23px;
+            top: 52px;
+            border: 3px solid #5F7C8D;</string>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="signup">
+            <property name="font">
+             <font>
+              <family>Istok Web</family>
+              <pointsize>-1</pointsize>
+              <weight>87</weight>
+              <italic>false</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"> font-family: 'Istok Web';
+            font-style: normal;
+            font-weight: 700;
+            font-size: 34px;
+            line-height: 38px;
+            color: #5F7C8D;
+background-color: transparent;</string>
+            </property>
+            <property name="text">
+             <string>SignUp</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QLineEdit" name="password">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;
+            font-family: 'Istok Web';
+            font-style: normal;
+            font-size: 28px;
+            color: rgba(95, 124, 141, 0.55);
+ letter-spacing: 0.75px;
+ border: none;
+border-bottom:2.5px solid #5F7C8D;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="echoMode">
+             <enum>QLineEdit::Password</enum>
+            </property>
+            <property name="placeholderText">
+             <string>Password</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QPushButton" name="Login_button">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"> position: absolute;
+            width: 432px;
+            height: 73px;
+            left: 691px;
+            top: 581px;
+            background: #4B687A;
+ font-family: 'Istok Web';
+            font-style: normal;
+            font-weight: 600;
+            font-size: 28px;
+color : white</string>
+            </property>
+            <property name="text">
+             <string>Login</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="label_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>90</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">
+
+font-family: 'Istok Web';
+font-style: normal;
+font-weight: 700;
+font-size: 54px;
+line-height: 92px;
+
+color: #7A999C;
+background : transparent;
+margin-bottom:40px;</string>
+            </property>
+            <property name="text">
+             <string>Welcome</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QLineEdit" name="username">
+            <property name="styleSheet">
+             <string notr="true">background: transparent;
+            font-family: 'Istok Web';
+            font-style: normal;
+            font-size: 28px;
+            color: rgba(95, 124, 141, 0.55);
+ letter-spacing: 0.75px;
+border: none;
+border-bottom:2.5px solid #5F7C8D;</string>
+            </property>
+            <property name="placeholderText">
+             <string>Username</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1484</width>
+     <height>18</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources>
+  <include location="../Feb-7 Project/PyQT/Login and Sign up/stripes.qrc"/>
+ </resources>
+ <connections/>
+</ui>
