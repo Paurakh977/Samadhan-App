@@ -442,17 +442,22 @@ class Ui_MainWindow(object):
         title = window.title
         
         if " - Google Chrome" in title:
+
             if "- YouTube" in title:
                 tab_name="Youtube"
                 return tab_name
-            else:    
+            else:   
                 app = Application(backend='uia')
                 app.connect(title_re=".*Chrome.*", found_index=0)
                 element_name="Address and search bar"
                 dlg = app.top_window()
                 url = dlg.child_window(title=element_name, control_type="Edit").get_value()
-                tab_name= url.split(".com")[0]
-                return tab_name
+                if "localhost" in url:
+                    tab_name="localhost Server" 
+                    return tab_name
+                else:
+                    tab_name= url.split(".com")[0]
+                    return tab_name
         elif " - Mozilla Firefox" in title:
             if "- YouTube" in title:
                 tab_name="Youtube"
