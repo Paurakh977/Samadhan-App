@@ -284,7 +284,9 @@ class Weekly(QMainWindow):
         self.line_graph_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.line_graph_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.line_graph_frame.setObjectName("line_graph_frame")
+        self.line_graph_frame.setMinimumHeight(420)
         self.gridLayout.addWidget(self.line_graph_frame, 1, 0, 1, 2)
+        self.setupLineGraph()
         self.horizontalLayout.addWidget(self.main_body)
         self.main_body.raise_()
         self.side_menu.raise_()
@@ -306,7 +308,53 @@ class Weekly(QMainWindow):
         self.pushButton_6.setText(_translate("MainWindow", "Return"))
        
        
-       
+    def setupLineGraph(self):
+    # Open the database connection
+        conn = sqlite3.connect('app_screen_time.db')
+        cursor = conn.cursor()
+
+        top_3_apps = self.get_top_3_apps(cursor)  # Pass the cursor to get_top_3_apps method
+        days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        line_colors = ['#9370DB', 'limegreen', 'skyblue']
+
+        # Matplotlib setup
+        self.fig_line, self.ax_line = plt.subplots(figsize=(6, 4))
+        self.canvas_line = FigureCanvas(self.fig_line)
+        layout = QtWidgets.QVBoxLayout(self.line_graph_frame)
+        layout.addWidget(self.canvas_line)
+
+        for i, app_info in enumerate(top_3_apps):
+            app_name = app_info[0]
+            app_usage = []
+            for day in days_of_week:
+                cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=? AND Day=?", (app_name, day))
+                total_time = cursor.fetchone()
+                app_usage.append(total_time[0] if total_time else 0)
+
+            # Plotting usage over the week with specified line color and 'o' markers
+            self.ax_line.plot(days_of_week, app_usage, label=app_name, marker='o', color=line_colors[i])
+
+        # Set title, labels, legend, and other plot configurations
+        title_font = {'family': 'sans-serif', 'weight': 'bold', 'size': 16, 'color': 'black'}
+        self.ax_line.set_title('Trend of Most Used Apps Over The Week', fontdict=title_font, loc='left')
+        self.ax_line.set_ylabel('Total Screen Time', color='grey')
+        self.ax_line.legend(loc='upper left', bbox_to_anchor=(0.7, 1.07), ncol=len(top_3_apps), frameon=False, facecolor='white', edgecolor='white')
+        self.ax_line.spines['top'].set_visible(False)
+        self.ax_line.spines['right'].set_visible(False)
+        self.ax_line.spines['bottom'].set_visible(True)
+        self.ax_line.spines['left'].set_visible(False)
+        plt.tick_params(axis='both', colors='grey')
+        plt.grid(axis='y', linestyle='-', alpha=0.7)
+        self.canvas_line.draw()
+
+        # Close the database connection
+        conn.close()
+
+    def get_top_3_apps(self, cursor):
+        cursor.execute("SELECT app_name, SUM(total_screen_time) AS total_time FROM screen_time GROUP BY app_name ORDER BY total_time DESC LIMIT 3")
+        top_3_apps = cursor.fetchall()
+        return top_3_apps
+    
     def setupBarGraphAnimation(self):
         self.conn = sqlite3.connect('app_screen_time.db')
         self.fig, self.ax = plt.subplots()
@@ -414,13 +462,12 @@ class Weekly(QMainWindow):
                             explode=explode, colors=plt.cm.tab20c(np.arange(len(labels))),
                             wedgeprops=dict(width=0.4))
 
-        ax.set_title("Weekly App Usage Report", loc="left", fontsize=18, weight='light', color='#4A90E2',
-                    fontname='DejaVu Sans')
 
         legend_without_labels = ax.legend(wedges, labels, title='', loc="upper center", bbox_to_anchor=(0.5, 1.15),
                                         ncol=len(labels), fontsize='small')
         ax.add_artist(legend_without_labels)
         ax.axis('equal')
+        ax.text(0.5, -1.25, "Weekly App Usage Report", fontsize=18, weight='light', color='#4A90E2', fontname='DejaVu Sans', ha='center')
 
         canvas = FigureCanvas(fig)
         layout = QtWidgets.QVBoxLayout()  # Create a new layout
