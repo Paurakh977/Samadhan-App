@@ -17,6 +17,7 @@
 
 
 
+import datetime
 import sqlite3
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication
@@ -327,9 +328,34 @@ class Weekly(QMainWindow):
             return f"{seconds}s"
 
 
+
+
     def get_screen_time_per_day(self):
         cursor = self.conn.cursor()
-        cursor.execute("SELECT Day, SUM(total_screen_time) FROM screen_time GROUP BY Day")
+
+        # Get the current day of the week
+        today = datetime.datetime.today().strftime('%A')
+
+        # Define the order of days starting from Sunday
+        days_order = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+        # Find the index of the first available day in the database
+        first_day_index = days_order.index(today)
+
+        # Reorder the days to start from the first available day
+        reordered_days = days_order[first_day_index:] + days_order[:first_day_index]
+
+        # Generate the ORDER BY clause based on the reordered days
+        order_by_clause = 'CASE Day '
+
+        for i, day in enumerate(reordered_days, start=1):
+            order_by_clause += f'WHEN \'{day}\' THEN {i} '
+
+        order_by_clause += 'END'
+
+        # Execute the SQL query with the dynamically generated ORDER BY clause
+        cursor.execute(f"SELECT Day, SUM(total_screen_time) FROM screen_time GROUP BY Day ORDER BY {order_by_clause}")
+
         data = cursor.fetchall()
         return data
 
@@ -353,6 +379,7 @@ class Weekly(QMainWindow):
     def animate(self):
         ani = animation.FuncAnimation(self.fig, self.update_plot, interval=1000)
         plt.show()
+    
        
     def plot_most_used_apps_pie(self):
         conn = sqlite3.connect('app_screen_time.db')
