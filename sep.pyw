@@ -2,6 +2,7 @@ import sqlite3
 import pygetwindow as gw
 import time
 from pywinauto import Application
+import datetime
 
 class ScreenTimeTracker:
     def __init__(self, db_name='app_screen_time.db'):
@@ -11,36 +12,58 @@ class ScreenTimeTracker:
     def create_table(self):
         cursor = self.conn.cursor()
         cursor.execute('''CREATE TABLE IF NOT EXISTS screen_time (
-                            app_name TEXT PRIMARY KEY,
-                            total_screen_time REAL
+                            app_name TEXT ,
+                            total_screen_time REAL,
+                            Day TEXT
                         )''')
-        self.conn.commit()
-
+        cursor.execute('''CREATE TABLE IF NOT EXISTS timeline (
+                            app_name TEXT ,
+                            time_opened datetime,
+                            time_closed datetime,
+                            Day
+                        )''')
+       
     def track_and_store_screen_time(self):
+        active_window = gw.getActiveWindow()
+        now = datetime.datetime.now()
+        present_day = now.strftime("%A")
+        current_time = now.strftime("%H:%M:%S")
+       
         while True:
             active_window = gw.getActiveWindow()
             if active_window is not None:
                 app_name = active_window.title
-                
+               
                 if app_name != 'Main Window':  # Exclude details about the PyQt window
                     if "Google Chrome" in app_name or "Firefox" in app_name or "Microsoft​ Edge" in app_name:
                         tab_name = self.get_browser_tab_name(active_window)        
                     else:
                         tab_name = app_name.split("-")[-1]
                         tab_name = tab_name.strip()
-
                     cursor = self.conn.cursor()
                     cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=?", (tab_name,))
                     row = cursor.fetchone()
-
                     if row:
                         total_time = row[0] + 1  # Update every second
                         cursor.execute("UPDATE screen_time SET total_screen_time=? WHERE app_name=?", (total_time, tab_name))
                     else:
-                        cursor.execute("INSERT INTO screen_time (app_name, total_screen_time) VALUES (?, ?)", (tab_name, 1))
+                        cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
+                                   (tab_name, 1, present_day))
 
-                    self.conn.commit()
 
+                cursor.execute("SELECT * FROM timeline WHERE app_name=? AND time_closed IS NULL", (tab_name,))
+                row = cursor.fetchone()
+
+
+                if row:
+                    cursor.execute("UPDATE timeline SET time_closed=? WHERE app_name=? AND time_closed IS NULL",
+                                   (current_time, tab_name))
+                else:
+                    cursor.execute("INSERT INTO timeline (app_name, time_opened, Day) VALUES (?, ?, ?)",
+                                   (tab_name, current_time, present_day))
+
+
+                self.conn.commit()
             time.sleep(1)  # Track every second
 
     def get_browser_tab_name(self, window):
@@ -76,7 +99,7 @@ class ScreenTimeTracker:
                 tab_name= url.split(".com")[0]
                 return tab_name
         elif "Edge" in title:
-            if "- YouTube" in title:
+            if "YouTube" in title:
                 tab_name="Youtube"
                 return tab_name
             else:    
@@ -85,14 +108,18 @@ class ScreenTimeTracker:
                 dlg = app.top_window()
                 wrapper = dlg.child_window(title="App bar", control_type="ToolBar")
                 url = wrapper.descendants(control_type='Edit')[0]
-                tab_name=(url.get_value()).split("www.")[1]
-                tab_name=tab_name.split(".com")[0]
-                return tab_name
-        elif "- Visual Studio Code" in title:
-                title="Visual Studio Code"
-                return title
+                url=url.get_value()
+                if "www" in url:
+                    tab_name=url.split('www.')[1].split('.com')[0]
+                    return tab_name
+                elif ".com" in url:
+                    tab_name=url.split('.com')[0].split('https://')[1] 
+                    return tab_name   
+                else:
+                    tab_name='new tab'
+                    return tab_name    
         else:
-            return title    
+            return title   
 
 def main():
     tracker = ScreenTimeTracker()
