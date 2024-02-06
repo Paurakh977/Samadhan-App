@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import stripes_rc
 
 
 class Ui_MainWindow(object):
@@ -184,7 +185,6 @@ class Ui_MainWindow(object):
         self.email.setPlaceholderText(_translate("MainWindow", "Email"))
         self.password.setPlaceholderText(_translate("MainWindow", "Password"))
         self.Login_button.setText(_translate("MainWindow", "Login"))
-import stripes_rc
 
 
 if __name__ == "__main__":
