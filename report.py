@@ -362,10 +362,7 @@ class Weekly(QMainWindow):
         self.ax.set_xlabel('Day of the Week')
         self.ax.set_ylabel('Total Screen Time')
         self.ax.set_title('Total Screen Time per Day')
-        self.ax.grid(axis='y', linestyle='--', alpha=0.7)
-
-
-
+        self.ax.grid(alpha=0.5)
 
         # Annotate bars with total screen time
         for x, y, label in zip(days, total_screen_time, formatted_times):

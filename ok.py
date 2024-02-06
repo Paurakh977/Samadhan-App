@@ -140,10 +140,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame_4)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 80))
-        self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_2.setStyleSheet("QPushButton {\n"
+        self.Home_button = QtWidgets.QPushButton(self.frame_4)
+        self.Home_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.Home_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Home_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -156,14 +156,14 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/icons_folder/home.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_2.setIcon(icon1)
-        self.pushButton_2.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout_3.addWidget(self.pushButton_2, 0, QtCore.Qt.AlignTop)
-        self.pushButton_3 = QtWidgets.QPushButton(self.frame_4)
-        self.pushButton_3.setMinimumSize(QtCore.QSize(0, 80))
-        self.pushButton_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_3.setStyleSheet("QPushButton {\n"
+        self.Home_button.setIcon(icon1)
+        self.Home_button.setIconSize(QtCore.QSize(20, 20))
+        self.Home_button.setObjectName("Home_button")
+        self.verticalLayout_3.addWidget(self.Home_button)
+        self.Daily_button = QtWidgets.QPushButton(self.frame_4)
+        self.Daily_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.Daily_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Daily_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -176,19 +176,37 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/icons/icons_folder/file-text.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_3.setIcon(icon2)
-        self.pushButton_3.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.verticalLayout_3.addWidget(self.pushButton_3, 0, QtCore.Qt.AlignTop)
-        self.pushButton_5 = QtWidgets.QPushButton(self.frame_4)
+        self.Daily_button.setIcon(icon2)
+        self.Daily_button.setIconSize(QtCore.QSize(20, 20))
+        self.Daily_button.setObjectName("Daily_button")
+        self.verticalLayout_3.addWidget(self.Daily_button)
+        self.Weekly_button = QtWidgets.QPushButton(self.frame_4)
+        self.Weekly_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.Weekly_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Weekly_button.setStyleSheet("QPushButton {\n"
+"                font-family: \'Istok Web\';\n"
+"                font-weight: 700;\n"
+"                font-size: 20px;\n"
+"\n"
+"\n"
+"            }\n"
+"            QPushButton:hover {\n"
+"background-color:rgb(5, 171, 232    );    \n"
+"            }\n"
+"        \"\"")
+        self.Weekly_button.setIcon(icon2)
+        self.Weekly_button.setIconSize(QtCore.QSize(20, 20))
+        self.Weekly_button.setObjectName("Weekly_button")
+        self.verticalLayout_3.addWidget(self.Weekly_button)
+        self.Reminder_button = QtWidgets.QPushButton(self.frame_4)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_5.sizePolicy().hasHeightForWidth())
-        self.pushButton_5.setSizePolicy(sizePolicy)
-        self.pushButton_5.setMinimumSize(QtCore.QSize(20, 80))
-        self.pushButton_5.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_5.setStyleSheet("QPushButton {\n"
+        sizePolicy.setHeightForWidth(self.Reminder_button.sizePolicy().hasHeightForWidth())
+        self.Reminder_button.setSizePolicy(sizePolicy)
+        self.Reminder_button.setMinimumSize(QtCore.QSize(20, 80))
+        self.Reminder_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Reminder_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -201,14 +219,14 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/icons/icons_folder/calendar.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_5.setIcon(icon3)
-        self.pushButton_5.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.verticalLayout_3.addWidget(self.pushButton_5, 0, QtCore.Qt.AlignTop)
-        self.pushButton_6 = QtWidgets.QPushButton(self.frame_4)
-        self.pushButton_6.setMinimumSize(QtCore.QSize(0, 80))
-        self.pushButton_6.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_6.setStyleSheet("QPushButton {\n"
+        self.Reminder_button.setIcon(icon3)
+        self.Reminder_button.setIconSize(QtCore.QSize(20, 20))
+        self.Reminder_button.setObjectName("Reminder_button")
+        self.verticalLayout_3.addWidget(self.Reminder_button)
+        self.return_button = QtWidgets.QPushButton(self.frame_4)
+        self.return_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.return_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.return_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -221,10 +239,10 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/icons/icons_folder/arrow-left.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_6.setIcon(icon4)
-        self.pushButton_6.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_6.setObjectName("pushButton_6")
-        self.verticalLayout_3.addWidget(self.pushButton_6, 0, QtCore.Qt.AlignTop)
+        self.return_button.setIcon(icon4)
+        self.return_button.setIconSize(QtCore.QSize(20, 20))
+        self.return_button.setObjectName("return_button")
+        self.verticalLayout_3.addWidget(self.return_button)
         self.verticalLayout_2.addWidget(self.frame_4)
         self.horizontalLayout.addWidget(self.side_menu)
         self.main_body = QtWidgets.QFrame(self.frame_2)
@@ -462,10 +480,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Menu"))
         self.label.setText(_translate("MainWindow", "Samadhan App"))
-        self.pushButton_2.setText(_translate("MainWindow", "Home"))
-        self.pushButton_3.setText(_translate("MainWindow", "Report"))
-        self.pushButton_5.setText(_translate("MainWindow", "Reminder"))
-        self.pushButton_6.setText(_translate("MainWindow", "Return"))
+        self.Home_button.setText(_translate("MainWindow", "Home"))
+        self.Daily_button.setText(_translate("MainWindow", "Daily"))
+        self.Weekly_button.setText(_translate("MainWindow", "Weekly"))
+        self.Reminder_button.setText(_translate("MainWindow", "Reminder"))
+        self.return_button.setText(_translate("MainWindow", "Return"))
 import icons_rc
     
 
