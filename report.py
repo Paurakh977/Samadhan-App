@@ -461,19 +461,22 @@ class Weekly(QMainWindow):
         wedges, _, _ = ax.pie(sizes, labels=None, autopct='%1.1f%%', pctdistance=0.85, startangle=90,
                             explode=explode, colors=plt.cm.tab20c(np.arange(len(labels))),
                             wedgeprops=dict(width=0.4))
+        total_time = self.format_time(total_time)
+        total_time_text = f'Total Screen Time: {(total_time)} seconds'  # Format the total time text
 
+        # Create text element to display total screen time at the center
+        ax.text(1.5, -1.3, total_time_text, fontsize=10, weight='bold', color='black', ha='center', va='center')
 
         legend_without_labels = ax.legend(wedges, labels, title='', loc="upper center", bbox_to_anchor=(0.5, 1.15),
                                         ncol=len(labels), fontsize='small')
         ax.add_artist(legend_without_labels)
         ax.axis('equal')
-        ax.text(0.5, -1.25, "Weekly App Usage Report", fontsize=18, weight='light', color='#4A90E2', fontname='DejaVu Sans', ha='center')
+        ax.text(-1.3, -1.25, "Weekly App Usage Report", fontsize=18, weight='bold', color='#4A90E2', fontname='DejaVu Sans', ha='center')
 
         canvas = FigureCanvas(fig)
         layout = QtWidgets.QVBoxLayout()  # Create a new layout
         layout.addWidget(canvas)
-        self.pie_chart_frame.setLayout(layout)  # Set the layout for pie_chart_frame
-        
+        self.pie_chart_frame.setLayout(layout)          
         
 import icons_rc
 
