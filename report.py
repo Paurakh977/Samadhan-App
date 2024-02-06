@@ -24,6 +24,11 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
+import sqlite3
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import numpy as np
 
 
 
@@ -257,6 +262,9 @@ class Weekly(QMainWindow):
         self.pie_chart_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.pie_chart_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.pie_chart_frame.setObjectName("pie_chart_frame")
+        
+        self.plot_most_used_apps_pie()
+        
         self.gridLayout.addWidget(self.pie_chart_frame, 0, 0, 1, 1)
         self.bar_graph_frame = QtWidgets.QFrame(self.main_body)
         self.bar_graph_frame.setMinimumSize(QtCore.QSize(0, 200))
@@ -283,13 +291,8 @@ class Weekly(QMainWindow):
         MainWindow.setCentralWidget(self.centralwidget)
 
 
-
-
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -301,6 +304,8 @@ class Weekly(QMainWindow):
         self.pushButton_5.setText(_translate("MainWindow", "Reminder"))
         self.pushButton_6.setText(_translate("MainWindow", "Return"))
        
+       
+       
     def setupBarGraphAnimation(self):
         self.conn = sqlite3.connect('app_screen_time.db')
         self.fig, self.ax = plt.subplots()
@@ -309,14 +314,7 @@ class Weekly(QMainWindow):
         layout.addWidget(self.canvas)  # Add the canvas widget to the layout
         self.ani = animation.FuncAnimation(self.fig, self.update_plot, interval=1000)  # Fix method name
 
-
-
-
-        self.setupPieChart()  
-
-
-
-
+         
     def format_time(self, seconds):
         if seconds >= 3600:
             hours = seconds // 3600
@@ -329,8 +327,6 @@ class Weekly(QMainWindow):
             return f"{seconds}s"
 
 
-
-
     def get_screen_time_per_day(self):
         cursor = self.conn.cursor()
         cursor.execute("SELECT Day, SUM(total_screen_time) FROM screen_time GROUP BY Day")
@@ -338,79 +334,73 @@ class Weekly(QMainWindow):
         return data
 
 
-
-
     def update_plot(self, i):
         self.ax.clear()
         data = self.get_screen_time_per_day()
-
-
-
-
         days = [row[0] for row in data]
         total_screen_time = [row[1] for row in data]
-
-
-
-
         formatted_times = [self.format_time(time) for time in total_screen_time]
-
-
-
-
         self.ax.bar(days, total_screen_time, color='skyblue', width=0.6)  # Adjust width as per your preference
         self.ax.set_xlabel('Day of the Week')
         self.ax.set_ylabel('Total Screen Time')
         self.ax.set_title('Total Screen Time per Day')
         self.ax.grid(alpha=0.5)
-
-        # Annotate bars with total screen time
+ # Annotate bars with total screen time
         for x, y, label in zip(days, total_screen_time, formatted_times):
             self.ax.text(x, y, label, ha='center', va='bottom')
-
-
 
 
     def animate(self):
         ani = animation.FuncAnimation(self.fig, self.update_plot, interval=1000)
         plt.show()
        
-    def setupPieChart(self):
-        self.pie_fig, self.pie_ax = plt.subplots()
-        self.pie_canvas = FigureCanvas(self.pie_fig)
-        layout = QtWidgets.QVBoxLayout(self.pie_chart_frame)
-        layout.addWidget(self.pie_canvas)
-        self.pie_ani = animation.FuncAnimation(self.pie_fig, self.update_pie_chart, interval=1000)
+    def plot_most_used_apps_pie(self):
+        conn = sqlite3.connect('app_screen_time.db')
+        cursor = conn.cursor()
 
-    def update_pie_chart(self, i):
-        self.pie_ax.clear()
-        labels = []
-        sizes = []
-
-        cursor = self.conn.cursor()
         cursor.execute("SELECT app_name, SUM(total_screen_time) FROM screen_time GROUP BY app_name")
-
         data = cursor.fetchall()
 
-        total_time = sum([row[1] for row in data])
+        conn.close()
+
+        total_time = sum(row[1] for row in data)
+        labels = []
+        sizes = []
 
         for row in data:
             if row[1] / total_time >= 0.05:
                 labels.append(row[0])
                 sizes.append(row[1])
 
-        # Plotting 'Others' category for apps with less than 5% usage time
         other_apps_time = total_time - sum(sizes)
         if other_apps_time > 0:
             labels.append('Others')
             sizes.append(other_apps_time)
 
-        self.pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
-        self.pie_ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-        self.pie_ax.set_title('Application Usage Distribution')
+        max_index = sizes.index(max(sizes))
+        explode = [0.1 if i == max_index else 0 for i in range(len(labels))]
 
-        self.pie_canvas.draw()
+        fig = Figure(figsize=(8, 8))
+        ax = fig.add_subplot(111)
 
+        wedges, _, _ = ax.pie(sizes, labels=None, autopct='%1.1f%%', pctdistance=0.85, startangle=90,
+                            explode=explode, colors=plt.cm.tab20c(np.arange(len(labels))),
+                            wedgeprops=dict(width=0.4))
+
+        ax.set_title("Weekly App Usage Report", loc="left", fontsize=18, weight='light', color='#4A90E2',
+                    fontname='DejaVu Sans')
+
+        legend_without_labels = ax.legend(wedges, labels, title='', loc="upper center", bbox_to_anchor=(0.5, 1.15),
+                                        ncol=len(labels), fontsize='small')
+        ax.add_artist(legend_without_labels)
+        ax.axis('equal')
+
+        canvas = FigureCanvas(fig)
+        layout = QtWidgets.QVBoxLayout()  # Create a new layout
+        layout.addWidget(canvas)
+        self.pie_chart_frame.setLayout(layout)  # Set the layout for pie_chart_frame
+        
+        
 import icons_rc
 
 if __name__ == "__main__":
