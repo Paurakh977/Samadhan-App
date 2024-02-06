@@ -3,9 +3,10 @@ import pygetwindow as gw
 import time
 from pywinauto import Application
 import datetime
+from plyer import notification
 
 class ScreenTimeTracker:
-    def __init__(self, db_name='app_screen_time.db'):
+    def __init__(self, db_name=r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db'):
         self.conn = sqlite3.connect(db_name)
         self.create_table()
 
@@ -22,15 +23,34 @@ class ScreenTimeTracker:
                             time_closed datetime,
                             Day
                         )''')
+    
+    def get_total_screen_time_today(self, present_day):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT SUM(total_screen_time) FROM screen_time WHERE Day=?", (present_day,))
+        total_screen_time_today = cursor.fetchone()[0]
+        return total_screen_time_today
+
        
     def track_and_store_screen_time(self):
         active_window = gw.getActiveWindow()
         now = datetime.datetime.now()
         present_day = now.strftime("%A")
         current_time = now.strftime("%H:%M:%S")
-       
+        notification_sent=False
         while True:
             active_window = gw.getActiveWindow()
+            total_screen_time_today = self.get_total_screen_time_today(present_day)
+
+            if total_screen_time_today and total_screen_time_today > 7 * 3600:  # 7 hours in seconds
+                if notification_sent is False:
+                    notification_title = "Screen Time Alert"
+                    notification_message = f"Your screen time is: {int(total_screen_time_today / 3600)} hours.\n Please take a break."
+                    notification.notify(
+                        title=notification_title,
+                        message=notification_message,
+                        timeout=10)
+                    notification_sent=True
+                
             if active_window is not None:
                 app_name = active_window.title
                
