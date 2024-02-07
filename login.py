@@ -886,6 +886,8 @@ class Landing(QMainWindow):
         daily = daily_report()
         widget.addWidget(daily)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+        daily.pie_chart_canvas.draw()
+
         
     def reminder_clicked(self):
         rem = Reminder()
@@ -1393,6 +1395,7 @@ class Reminder(QMainWindow):
         daily = daily_report()
         widget.addWidget(daily)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+        daily.pie_chart_canvas.draw()
         
     def reminder_clicked(self):
         rem = Reminder()
@@ -1554,6 +1557,9 @@ class daily_report(QMainWindow):
     def __init__(self):
         super(daily_report, self).__init__()
         self.setupUi(self)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update)
+        self.timer.start(1000)
         
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -1817,7 +1823,6 @@ class daily_report(QMainWindow):
         self.conn = sqlite3.connect('app_screen_time.db')
         self.cursor = self.conn.cursor()
        
-        self.ani = FuncAnimation(self.pie_chart_canvas.figure, self.update, interval=1000)
         self.Home_button.clicked.connect(self.home_clicked)
         self.Daily_button.clicked.connect(self.daily_clicked)
         self.Weekly_button.clicked.connect(self.weekly_clicked)
@@ -1833,7 +1838,8 @@ class daily_report(QMainWindow):
         daily = daily_report()
         widget.addWidget(daily)
         widget.setCurrentIndex(widget.currentIndex() + 1)
-        
+        daily.pie_chart_canvas.draw()
+                
     def reminder_clicked(self):
         rem = Reminder()
         widget.addWidget(rem)
@@ -1851,15 +1857,13 @@ class daily_report(QMainWindow):
             widget.setCurrentIndex(widget.currentIndex() - 1)
 
 
-    def update(self, frame):
+    def update(self, frame=None):
         today_day_of_week = datetime.datetime.now().strftime('%A')
         data = self.fetch_apps_used_today(self.cursor, today_day_of_week)
-
 
         if not data:
             print(f"No data available for {today_day_of_week}.")
             return
-
 
         total_time = sum(row[1] for row in data)
         labels = []
@@ -1869,31 +1873,35 @@ class daily_report(QMainWindow):
                 labels.append(row[0])
                 sizes.append(row[1])
 
-
         other_apps_time = total_time - sum(sizes)
         if other_apps_time > 0:
             labels.append('Others')
             sizes.append(other_apps_time)
 
+        # Clear the pie chart canvas
+        self.pie_chart_canvas.figure.clear()
 
-        plt.clf()
-        wedges, _, _ = plt.pie(sizes, labels=None, autopct='%1.1f%%', pctdistance=0.85, startangle=90, explode=[0.1 if i == sizes.index(max(sizes)) else 0 for i in range(len(labels))], colors=plt.cm.tab20c(np.arange(len(labels))), wedgeprops=dict(width=0.4))
+        # Plot the updated pie chart
+        wedges, _, _ = self.pie_chart_canvas.figure.gca().pie(
+            sizes, labels=None, autopct='%1.1f%%', pctdistance=0.85, startangle=90,
+            explode=[0.1 if i == sizes.index(max(sizes)) else 0 for i in range(len(labels))],
+            colors=plt.cm.tab20c(np.arange(len(labels))), wedgeprops=dict(width=0.4))
+        
         centre_circle = Circle((0, 0), 0.6, color='white', linewidth=1.25)
-        plt.gca().add_artist(centre_circle)
-
+        self.pie_chart_canvas.figure.gca().add_artist(centre_circle)
 
         total_time_str = self.format_time(total_time)
-        plt.text(0, 0, total_time_str, ha='center', va='center', fontsize=14, color='#4A90E2')
+        self.pie_chart_canvas.figure.gca().text(0, 0, total_time_str, ha='center', va='center', fontsize=14, color='#4A90E2')
 
+        self.pie_chart_canvas.figure.gca().set_title(f"Apps Used on {today_day_of_week}", loc="left", fontsize=18, weight='light', color='#4A90E2', fontname='DejaVu Sans')
 
-        plt.title(f"Apps Used on {today_day_of_week}", loc="left", fontsize=18, weight='light', color='#4A90E2', fontname='DejaVu Sans')
+        legend_without_labels = self.pie_chart_canvas.figure.gca().legend(wedges, labels, title='', loc="upper center", bbox_to_anchor=(0.5, 1.15), ncol=len(labels), fontsize='small')
+        self.pie_chart_canvas.figure.gca().add_artist(legend_without_labels)
 
+        self.pie_chart_canvas.figure.gca().axis('equal')
 
-        legend_without_labels = plt.legend(wedges, labels, title='', loc="upper center", bbox_to_anchor=(0.5, 1.15), ncol=len(labels), fontsize='small')
-        plt.gca().add_artist(legend_without_labels)
-
-
-        plt.axis('equal')
+        # Redraw the canvas to reflect the changes
+        self.pie_chart_canvas.draw()
 
 
     def fetch_apps_used_today(self, cursor, today_day_of_week):
@@ -1929,8 +1937,7 @@ class Weekly(QMainWindow):
     def __init__(self):
         super(Weekly, self).__init__()
         self.setupUi(self)
-       
-       
+        self.setupBarGraphAnimation()  
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(586, 455)
@@ -2180,7 +2187,7 @@ class Weekly(QMainWindow):
         self.bar_graph_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.bar_graph_frame.setObjectName("bar_graph_frame")
        
-        self.setupBarGraphAnimation()  
+        # self.setupBarGraphAnimation()  
        
         self.gridLayout.addWidget(self.bar_graph_frame, 0, 1, 1, 1)
         self.line_graph_frame = QtWidgets.QFrame(self.main_body)
@@ -2214,6 +2221,7 @@ class Weekly(QMainWindow):
         daily = daily_report()
         widget.addWidget(daily)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+        daily.pie_chart_canvas.draw()
         
     def reminder_clicked(self):
         rem = Reminder()
@@ -2224,6 +2232,7 @@ class Weekly(QMainWindow):
         week = Weekly()
         widget.addWidget(week)
         widget.setCurrentIndex(widget.currentIndex() + 1)
+        # week.setupBarGraphAnimation()
         
     def return_button_clicked(self):
         if widget.currentIndex() > 0:
@@ -2302,7 +2311,8 @@ class Weekly(QMainWindow):
         self.canvas = FigureCanvas(self.fig)
         layout = QtWidgets.QVBoxLayout(self.bar_graph_frame)  # Create a layout for bar_graph_frame
         layout.addWidget(self.canvas)  # Add the canvas widget to the layout
-        self.ani = animation.FuncAnimation(self.fig, self.update_plot, interval=1000)  # Fix method name
+        self.ani = animation.FuncAnimation(self.fig, self.update_plot, interval=1000)
+        self.canvas.draw()
 
 
          
@@ -2316,12 +2326,6 @@ class Weekly(QMainWindow):
             return f"{minutes}m"
         else:
             return f"{seconds}s"
-
-
-
-
-
-
 
 
     def get_screen_time_per_day(self):
