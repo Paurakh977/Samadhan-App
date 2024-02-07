@@ -39,52 +39,48 @@ class ScreenTimeTracker:
         notification_sent=False
         while True:
             active_window = gw.getActiveWindow()
-            total_screen_time_today = self.get_total_screen_time_today(present_day)
-
-            if total_screen_time_today and total_screen_time_today > 7 * 3600:  # 7 hours in seconds
-                if notification_sent is False:
-                    notification_title = "Screen Time Alert"
-                    notification_message = f"Your screen time is: {int(total_screen_time_today / 3600)} hours.\n Please take a break."
-                    notification.notify(
-                        title=notification_title,
-                        message=notification_message,
-                        timeout=10)
-                    notification_sent=True
-                
             if active_window is not None:
                 app_name = active_window.title
-               
                 if app_name != 'Main Window':  # Exclude details about the PyQt window
-                    if "Google Chrome" in app_name or "Firefox" in app_name or "Microsoft​ Edge" in app_name:
+                    if "Google Chrome" in app_name or "Firefox" in app_name or "Microsoft Edge" in app_name:
                         tab_name = self.get_browser_tab_name(active_window)        
                     else:
-                        tab_name = app_name.split("-")[-1]
-                        tab_name = tab_name.strip()
+                        tab_name = app_name.split("-")[-1].strip()
+
                     cursor = self.conn.cursor()
-                    cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=?", (tab_name,))
-                    row = cursor.fetchone()
-                    if row:
-                        total_time = row[0] + 1  # Update every second
-                        cursor.execute("UPDATE screen_time SET total_screen_time=? WHERE app_name=?", (total_time, tab_name))
-                    else:
-                        cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
-                                   (tab_name, 1, present_day))
+                    try:
+                        # Check if a row exists for the current tab_name and present_day
+                        cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=? AND Day=?",
+                                    (tab_name, present_day))
+                        row = cursor.fetchone()
 
+                        if row:
+                            # If the row exists, update the screen time in that row
+                            total_time = row[0] + 1  # Update every second
+                            cursor.execute("UPDATE screen_time SET total_screen_time=? WHERE app_name=? AND Day=?",
+                                        (total_time, tab_name, present_day))
+                        else:
+                            # If the row doesn't exist, insert a new row for the current tab_name and present_day
+                            cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
+                                        (tab_name, 1, present_day))
 
-                cursor.execute("SELECT * FROM timeline WHERE app_name=? AND time_closed IS NULL", (tab_name,))
-                row = cursor.fetchone()
+                        # Check if a timeline entry exists for the current tab_name and if it's not closed yet
+                        cursor.execute("SELECT * FROM timeline WHERE app_name=? AND time_closed IS NULL", (tab_name,))
+                        row = cursor.fetchone()
 
+                        if row:
+                            cursor.execute("UPDATE timeline SET time_closed=? WHERE app_name=? AND time_closed IS NULL",
+                                        (current_time, tab_name))
+                        else:
+                            cursor.execute("INSERT INTO timeline (app_name, time_opened, Day) VALUES (?, ?, ?)",
+                                        (tab_name, current_time, present_day))
 
-                if row:
-                    cursor.execute("UPDATE timeline SET time_closed=? WHERE app_name=? AND time_closed IS NULL",
-                                   (current_time, tab_name))
-                else:
-                    cursor.execute("INSERT INTO timeline (app_name, time_opened, Day) VALUES (?, ?, ?)",
-                                   (tab_name, current_time, present_day))
+                        self.conn.commit()
+                    finally:
+                        cursor.close()
 
-
-                self.conn.commit()
             time.sleep(1)  # Track every second
+        # Track every second
 
     def get_browser_tab_name(self, window):
         title = window.title

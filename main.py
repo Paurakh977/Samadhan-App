@@ -961,13 +961,14 @@ class Landing(QMainWindow):
 
 
     def plot_graph(self):
+        
+        today_day_of_week = datetime.datetime.now().strftime('%A')    
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM screen_time WHERE app_name != 'Application Monitor' ORDER BY total_screen_time DESC LIMIT 5")
+        cursor.execute("SELECT app_name, total_screen_time FROM screen_time WHERE Day = ? ORDER BY total_screen_time DESC LIMIT 5", (today_day_of_week,))
         data = cursor.fetchall()
-
-
         apps = [row[0] for row in data]
         times = [row[1] for row in data]
+
 
 
         formatted_times = [self.format_time(time) for time in times]
