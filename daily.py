@@ -266,8 +266,8 @@ class daily_report(object):
         
         self.conn = sqlite3.connect('app_screen_time.db')
         self.cursor = self.conn.cursor()
-        
-        self.ani = FuncAnimation(self.pie_chart_canvas.figure, self.update, interval=1000)
+        self.ani = FuncAnimation(self.pie_chart_canvas.figure, self.update, interval=1000, save_count=100)
+
 
     def update(self, frame):
         today_day_of_week = datetime.datetime.now().strftime('%A')
