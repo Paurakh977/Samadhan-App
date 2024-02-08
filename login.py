@@ -59,6 +59,7 @@ import stripes_rc
 import icons_rc
 import welbeings_rc
 
+<<<<<<< HEAD
 
 
 
@@ -69,6 +70,15 @@ class Login(QMainWindow):
         self.setupUi(self)
         
 
+=======
+import signup
+class login_window(object):
+    def open_signup(self):
+            self.window=QtWidgets.QMainWindow()
+            self.ui=signup.signup_window()
+            self.ui.setupUi(self.window)
+            self.window.show()   
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1484, 1726)
@@ -215,7 +225,7 @@ class Login(QMainWindow):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
-
+        self.signup.clicked.connect(self.open_signup)
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         self.signup.clicked.connect(self.signup_clicked)
@@ -265,6 +275,7 @@ class Login(QMainWindow):
         self.Login_button.setText(_translate("MainWindow", "Login"))
         self.label_2.setText(_translate("MainWindow", "Welcome"))
         self.username.setPlaceholderText(_translate("MainWindow", "Username"))
+<<<<<<< HEAD
 
 class SignupWindow(QMainWindow):
         
@@ -775,6 +786,10 @@ class Landing(QMainWindow):
 "border:1px solid white;\n"
 "border-radius:5px;\n"
 "font-family:Times New Roman;\n"
+=======
+            
+import stripes_rc
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
 
 
 "font-weight:600;")
@@ -2453,9 +2468,18 @@ class Weekly(QMainWindow):
         self.pie_chart_frame.setLayout(layout)          
  
 if __name__ == "__main__":
+<<<<<<< HEAD
     app = QApplication(sys.argv)
     widget = QStackedWidget()
     MainWindow = Login()
     widget.addWidget(MainWindow)
     widget.show()
+=======
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = login_window()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
     sys.exit(app.exec_())

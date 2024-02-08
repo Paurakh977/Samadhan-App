@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>586</width>
-    <height>455</height>
+    <height>510</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -193,7 +193,7 @@ QPushButton {
            <widget class="QFrame" name="frame_4">
             <property name="minimumSize">
              <size>
-              <width>150</width>
+              <width>180</width>
               <height>0</height>
              </size>
             </property>
@@ -210,23 +210,8 @@ QPushButton {
              <enum>QFrame::Raised</enum>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pushButton_2">
+             <item>
+              <widget class="QPushButton" name="Home_button">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -264,8 +249,8 @@ background-color:rgb(5, 171, 232	);
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pushButton_3">
+             <item>
+              <widget class="QPushButton" name="Daily_button">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -289,7 +274,7 @@ background-color:rgb(5, 171, 232	);
         &quot;&quot;</string>
                </property>
                <property name="text">
-                <string>Report</string>
+                <string>Daily</string>
                </property>
                <property name="icon">
                 <iconset resource="icons.qrc">
@@ -303,8 +288,47 @@ background-color:rgb(5, 171, 232	);
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pushButton_5">
+             <item>
+              <widget class="QPushButton" name="Weekly_button">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>80</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+                font-family: 'Istok Web';
+                font-weight: 700;
+                font-size: 20px;
+
+
+            }
+            QPushButton:hover {
+background-color:rgb(5, 171, 232	);	
+            }
+        &quot;&quot;</string>
+               </property>
+               <property name="text">
+                <string>Weekly</string>
+               </property>
+               <property name="icon">
+                <iconset resource="icons.qrc">
+                 <normaloff>:/icons/icons_folder/file-text.svg</normaloff>:/icons/icons_folder/file-text.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="Reminder_button">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -348,8 +372,8 @@ background-color:rgb(5, 171, 232	);
                </property>
               </widget>
              </item>
-             <item alignment="Qt::AlignTop">
-              <widget class="QPushButton" name="pushButton_6">
+             <item>
+              <widget class="QPushButton" name="return_button">
                <property name="minimumSize">
                 <size>
                  <width>0</width>

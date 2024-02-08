@@ -140,10 +140,10 @@ class Ui_MainWindow(object):
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.pushButton_2 = QtWidgets.QPushButton(self.frame_4)
-        self.pushButton_2.setMinimumSize(QtCore.QSize(0, 80))
-        self.pushButton_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_2.setStyleSheet("QPushButton {\n"
+        self.Home_button = QtWidgets.QPushButton(self.frame_4)
+        self.Home_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.Home_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Home_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -156,14 +156,14 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/icons_folder/home.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_2.setIcon(icon1)
-        self.pushButton_2.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_2.setObjectName("pushButton_2")
-        self.verticalLayout_3.addWidget(self.pushButton_2, 0, QtCore.Qt.AlignTop)
-        self.pushButton_3 = QtWidgets.QPushButton(self.frame_4)
-        self.pushButton_3.setMinimumSize(QtCore.QSize(0, 80))
-        self.pushButton_3.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_3.setStyleSheet("QPushButton {\n"
+        self.Home_button.setIcon(icon1)
+        self.Home_button.setIconSize(QtCore.QSize(20, 20))
+        self.Home_button.setObjectName("Home_button")
+        self.verticalLayout_3.addWidget(self.Home_button)
+        self.Daily_button = QtWidgets.QPushButton(self.frame_4)
+        self.Daily_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.Daily_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Daily_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -176,19 +176,37 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/icons/icons_folder/file-text.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_3.setIcon(icon2)
-        self.pushButton_3.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.verticalLayout_3.addWidget(self.pushButton_3, 0, QtCore.Qt.AlignTop)
-        self.pushButton_5 = QtWidgets.QPushButton(self.frame_4)
+        self.Daily_button.setIcon(icon2)
+        self.Daily_button.setIconSize(QtCore.QSize(20, 20))
+        self.Daily_button.setObjectName("Daily_button")
+        self.verticalLayout_3.addWidget(self.Daily_button)
+        self.Weekly_button = QtWidgets.QPushButton(self.frame_4)
+        self.Weekly_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.Weekly_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Weekly_button.setStyleSheet("QPushButton {\n"
+"                font-family: \'Istok Web\';\n"
+"                font-weight: 700;\n"
+"                font-size: 20px;\n"
+"\n"
+"\n"
+"            }\n"
+"            QPushButton:hover {\n"
+"background-color:rgb(5, 171, 232    );    \n"
+"            }\n"
+"        \"\"")
+        self.Weekly_button.setIcon(icon2)
+        self.Weekly_button.setIconSize(QtCore.QSize(20, 20))
+        self.Weekly_button.setObjectName("Weekly_button")
+        self.verticalLayout_3.addWidget(self.Weekly_button)
+        self.Reminder_button = QtWidgets.QPushButton(self.frame_4)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_5.sizePolicy().hasHeightForWidth())
-        self.pushButton_5.setSizePolicy(sizePolicy)
-        self.pushButton_5.setMinimumSize(QtCore.QSize(20, 80))
-        self.pushButton_5.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_5.setStyleSheet("QPushButton {\n"
+        sizePolicy.setHeightForWidth(self.Reminder_button.sizePolicy().hasHeightForWidth())
+        self.Reminder_button.setSizePolicy(sizePolicy)
+        self.Reminder_button.setMinimumSize(QtCore.QSize(20, 80))
+        self.Reminder_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.Reminder_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -201,14 +219,14 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/icons/icons_folder/calendar.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_5.setIcon(icon3)
-        self.pushButton_5.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_5.setObjectName("pushButton_5")
-        self.verticalLayout_3.addWidget(self.pushButton_5, 0, QtCore.Qt.AlignTop)
-        self.pushButton_6 = QtWidgets.QPushButton(self.frame_4)
-        self.pushButton_6.setMinimumSize(QtCore.QSize(0, 80))
-        self.pushButton_6.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButton_6.setStyleSheet("QPushButton {\n"
+        self.Reminder_button.setIcon(icon3)
+        self.Reminder_button.setIconSize(QtCore.QSize(20, 20))
+        self.Reminder_button.setObjectName("Reminder_button")
+        self.verticalLayout_3.addWidget(self.Reminder_button)
+        self.return_button = QtWidgets.QPushButton(self.frame_4)
+        self.return_button.setMinimumSize(QtCore.QSize(0, 80))
+        self.return_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.return_button.setStyleSheet("QPushButton {\n"
 "                font-family: \'Istok Web\';\n"
 "                font-weight: 700;\n"
 "                font-size: 20px;\n"
@@ -221,10 +239,10 @@ class Ui_MainWindow(object):
 "        \"\"")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(":/icons/icons_folder/arrow-left.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_6.setIcon(icon4)
-        self.pushButton_6.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton_6.setObjectName("pushButton_6")
-        self.verticalLayout_3.addWidget(self.pushButton_6, 0, QtCore.Qt.AlignTop)
+        self.return_button.setIcon(icon4)
+        self.return_button.setIconSize(QtCore.QSize(20, 20))
+        self.return_button.setObjectName("return_button")
+        self.verticalLayout_3.addWidget(self.return_button)
         self.verticalLayout_2.addWidget(self.frame_4)
         self.horizontalLayout.addWidget(self.side_menu)
         self.main_body = QtWidgets.QFrame(self.frame_2)
@@ -249,7 +267,6 @@ class Ui_MainWindow(object):
         self.bar_graph_frame.setLayout(self.bar_graph_layout)
         
         self.conn = sqlite3.connect('app_screen_time.db')
-        self.create_table()
         self.timer = QTimer(MainWindow)
         self.timer.timeout.connect(self.update_data_and_plot)
         self.timer.start(1000)
@@ -406,84 +423,7 @@ class Ui_MainWindow(object):
         # self.lcd_number.set
         self.lcdNumber.display(formatted_time)
 
-    def create_table(self):
-        cursor = self.conn.cursor()
-        cursor.execute('''CREATE TABLE IF NOT EXISTS screen_time (
-                            app_name TEXT PRIMARY KEY,
-                            total_screen_time REAL
-                        )''')
-        self.conn.commit()
-
-    def track_and_store_screen_time(self):
-        active_window = gw.getActiveWindow()
-        if active_window is not None:
-            app_name = active_window.title
-            
-            if app_name != 'Main Window':  # Exclude details about the PyQt window
-                if "Google Chrome" in app_name or "Firefox" in app_name or "Microsoft​ Edge" in app_name:
-                    tab_name = self.get_browser_tab_name(active_window)        
-                else:
-                    tab_name = app_name.split("-")[-1]
-                    tab_name=tab_name.strip()
-
-                cursor = self.conn.cursor()
-                cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=?", (tab_name,))
-                row = cursor.fetchone()
-
-                if row:
-                    total_time = row[0] + 1  # Update every second
-                    cursor.execute("UPDATE screen_time SET total_screen_time=? WHERE app_name=?", (total_time, tab_name))
-                else:
-                    cursor.execute("INSERT INTO screen_time (app_name, total_screen_time) VALUES (?, ?)", (tab_name, 1))
-
-                self.conn.commit()
-
-    def get_browser_tab_name(self, window):
-        title = window.title
-        
-        if " - Google Chrome" in title:
-            if "- YouTube" in title:
-                tab_name="Youtube"
-                return tab_name
-            else:    
-                app = Application(backend='uia')
-                app.connect(title_re=".*Chrome.*", found_index=0)
-                element_name="Address and search bar"
-                dlg = app.top_window()
-                url = dlg.child_window(title=element_name, control_type="Edit").get_value()
-                tab_name= url.split(".com")[0]
-                return tab_name
-        elif " - Mozilla Firefox" in title:
-            if "- YouTube" in title:
-                tab_name="Youtube"
-                return tab_name
-            else:    
-                app = Application(backend='uia')
-                app.connect(title_re=".*Chrome.*", found_index=0)
-                element_name="Address and search bar"
-                dlg = app.top_window()
-                url = dlg.child_window(title=element_name, control_type="Edit").get_value()
-                tab_name= url.split(".com")[0]
-                return tab_name
-        elif "Edge" in title:
-            if "- YouTube" in title:
-                tab_name="Youtube"
-                return tab_name
-            else:    
-                app = Application(backend='uia')
-                app.connect(title_re=".*Microsoft​ Edge.*", found_index=0)
-                dlg = app.top_window()
-                wrapper = dlg.child_window(title="App bar", control_type="ToolBar")
-                url = wrapper.descendants(control_type='Edit')[0]
-                tab_name=(url.get_value()).split("www.")[1]
-                tab_name=tab_name.split(".com")[0]
-                return tab_name
-        elif "- Visual Studio Code" in title:
-                title="Visual Studio Code"
-                return title
-        else:
-            return title    
-
+    
     def format_time(self, seconds):
         if seconds >= 3600:
             hours = seconds // 3600
@@ -496,14 +436,13 @@ class Ui_MainWindow(object):
             return f"{seconds}s"
 
     def update_data_and_plot(self):
-        self.track_and_store_screen_time()
         self.plot_graph()
 
     def plot_graph(self):
+        today_day_of_week = datetime.datetime.now().strftime('%A')    
         cursor = self.conn.cursor()
-        cursor.execute("SELECT * FROM screen_time WHERE app_name != 'Application Monitor' ORDER BY total_screen_time DESC LIMIT 5")
+        cursor.execute("SELECT app_name, total_screen_time FROM screen_time WHERE Day = ? ORDER BY total_screen_time DESC LIMIT 5", (today_day_of_week,))
         data = cursor.fetchall()
-
         apps = [row[0] for row in data]
         times = [row[1] for row in data]
 
@@ -541,10 +480,11 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Menu"))
         self.label.setText(_translate("MainWindow", "Samadhan App"))
-        self.pushButton_2.setText(_translate("MainWindow", "Home"))
-        self.pushButton_3.setText(_translate("MainWindow", "Report"))
-        self.pushButton_5.setText(_translate("MainWindow", "Reminder"))
-        self.pushButton_6.setText(_translate("MainWindow", "Return"))
+        self.Home_button.setText(_translate("MainWindow", "Home"))
+        self.Daily_button.setText(_translate("MainWindow", "Daily"))
+        self.Weekly_button.setText(_translate("MainWindow", "Weekly"))
+        self.Reminder_button.setText(_translate("MainWindow", "Reminder"))
+        self.return_button.setText(_translate("MainWindow", "Return"))
 import icons_rc
     
 

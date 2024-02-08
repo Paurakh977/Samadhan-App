@@ -1,9 +1,19 @@
+<<<<<<< HEAD
+=======
+import datetime
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+<<<<<<< HEAD
 from matplotlib.animation import FuncAnimation
 
+=======
+from matplotlib.patches import Circle
+from matplotlib.animation import FuncAnimation
+import numpy as np
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
 class daily_report(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -234,6 +244,7 @@ class daily_report(object):
         self.main_body.setObjectName("main_body")
         self.gridLayout = QtWidgets.QGridLayout(self.main_body)
         self.gridLayout.setObjectName("gridLayout")
+<<<<<<< HEAD
         self.other_frame = QtWidgets.QFrame(self.main_body)
         self.other_frame.setMaximumSize(QtCore.QSize(450, 16777215))
         self.other_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
@@ -242,6 +253,15 @@ class daily_report(object):
         self.other_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.other_frame.setObjectName("other_frame")
         self.gridLayout.addWidget(self.other_frame, 0, 1, 1, 1)
+=======
+        self.bar_graph_frame = QtWidgets.QFrame(self.main_body)
+        self.bar_graph_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+                                            "border-radius:7px;")
+        self.bar_graph_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.bar_graph_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.bar_graph_frame.setObjectName("bar_graph_frame")
+        self.gridLayout.addWidget(self.bar_graph_frame, 0, 1, 1, 1)
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
         self.pie_chart_frame = QtWidgets.QFrame(self.main_body)
         self.pie_chart_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
                                             "border-radius:7px;")
@@ -262,6 +282,7 @@ class daily_report(object):
         self.pie_chart_canvas = FigureCanvas(plt.figure())
         self.gridLayoutPie = QtWidgets.QGridLayout(self.pie_chart_frame)
         self.gridLayoutPie.addWidget(self.pie_chart_canvas)
+<<<<<<< HEAD
 
         self.ani = FuncAnimation(self.pie_chart_canvas.figure, self.update_plot, interval=1000)
 
@@ -300,6 +321,65 @@ class daily_report(object):
         data = cursor.fetchall()
         return data
 
+=======
+        
+        self.conn = sqlite3.connect('app_screen_time.db')
+        self.cursor = self.conn.cursor()
+        self.ani = FuncAnimation(self.pie_chart_canvas.figure, self.update, interval=1000, save_count=100)
+
+
+    def update(self, frame):
+        today_day_of_week = datetime.datetime.now().strftime('%A')
+        data = self.fetch_apps_used_today(self.cursor, today_day_of_week)
+
+        if not data:
+            print(f"No data available for {today_day_of_week}.")
+            return
+
+        total_time = sum(row[1] for row in data)
+        labels = []
+        sizes = []
+        for row in data:
+            if row[1] / total_time >= 0.05:
+                labels.append(row[0])
+                sizes.append(row[1])
+
+        other_apps_time = total_time - sum(sizes)
+        if other_apps_time > 0:
+            labels.append('Others')
+            sizes.append(other_apps_time)
+
+        plt.clf()
+        wedges, _, _ = plt.pie(sizes, labels=None, autopct='%1.1f%%', pctdistance=0.85, startangle=90, explode=[0.1 if i == sizes.index(max(sizes)) else 0 for i in range(len(labels))], colors=plt.cm.tab20c(np.arange(len(labels))), wedgeprops=dict(width=0.4))
+        centre_circle = Circle((0, 0), 0.6, color='white', linewidth=1.25)
+        plt.gca().add_artist(centre_circle)
+
+        total_time_str = self.format_time(total_time)
+        plt.text(0, 0, total_time_str, ha='center', va='center', fontsize=14, color='#4A90E2')
+
+        plt.title(f"Apps Used on {today_day_of_week}", loc="left", fontsize=18, weight='light', color='#4A90E2', fontname='DejaVu Sans')
+
+        legend_without_labels = plt.legend(wedges, labels, title='', loc="upper center", bbox_to_anchor=(0.5, 1.15), ncol=len(labels), fontsize='small')
+        plt.gca().add_artist(legend_without_labels)
+
+        plt.axis('equal')
+
+    def fetch_apps_used_today(self, cursor, today_day_of_week):
+        cursor.execute("SELECT app_name, SUM(total_screen_time) FROM screen_time WHERE Day = ? GROUP BY app_name", (today_day_of_week,))
+        return cursor.fetchall()
+
+    def format_time(self, seconds):
+        hours, remainder = divmod(seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+
+        if hours >= 1:
+            return f"{int(hours)} h {int(minutes)} min {int(seconds)} sec"
+        elif minutes >= 1:
+            return f"{int(minutes)} min {int(seconds)} sec"
+        else:
+            return f"{int(seconds)} sec"
+    
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -321,4 +401,7 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
+<<<<<<< HEAD
 
+=======
+>>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
