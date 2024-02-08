@@ -3,7 +3,7 @@ from smtplib import SMTP
 sender = "pandeypaurakhraj@gmail.com"
 receiver = "dollarchaeyo@gmail.com"
 subject = "Testing"
-message = "Hello World!"
+message = "check check!"
 
 server = SMTP("smtp.gmail.com", 587)
 server.starttls()

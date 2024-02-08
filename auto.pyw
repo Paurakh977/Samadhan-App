@@ -3,7 +3,6 @@ import pygetwindow as gw
 import time
 from pywinauto import Application
 import datetime
-from plyer import notification
 
 class ScreenTimeTracker:
     def __init__(self, db_name=r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db'):
@@ -36,7 +35,6 @@ class ScreenTimeTracker:
         now = datetime.datetime.now()
         present_day = now.strftime("%A")
         current_time = now.strftime("%H:%M:%S")
-        notification_sent=False
         while True:
             active_window = gw.getActiveWindow()
             if active_window is not None:
