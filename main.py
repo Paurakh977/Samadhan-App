@@ -740,7 +740,7 @@ class Landing(QMainWindow):
         self.gridLayout.addWidget(self.bar_graph_frame, 0, 0, 2, 1)
         self.tasks_frame = QtWidgets.QFrame(self.main_body)
         self.tasks_frame.setMaximumSize(QtCore.QSize(166767, 400))
-        self.tasks_frame.setStyleSheet("background-color: rgb(255, 170, 127);\n"
+        self.tasks_frame.setStyleSheet("background-color: rgb(7, 185, 245);\n"
 "border-radius:7px;")
         self.tasks_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.tasks_frame.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -753,13 +753,18 @@ class Landing(QMainWindow):
         font.setPointSize(14)
         font.setBold(True)
         font.setWeight(75)
-        self.Task_1.setFont(font)
-        self.Task_1.setText("Meeting at 7:15 AM 1st FEB")
-        self.Task_1.setStyleSheet("background-color: #071e26;\n"
+        conn = sqlite3.connect(r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db')
+        cursor = conn.cursor()
+        present_day = datetime.datetime.now().strftime('%Y-%m-%d')
+        cursor.execute("SELECT task FROM tasks WHERE completed='NO' AND date=?", (present_day,))
+        uncompleted_tasks = cursor.fetchmany(3)
+        
+        self.Task_1.setFont(font)                        
+        self.Task_1.setStyleSheet("background-color: white;\n"
 "border:5px solid white;\n"
 "border-radius:7px;\n"
 "font-family:Times New Roman;\n"
-"color:white;\n"
+"color:Black;\n"
 "font-weight:600;")
         self.Task_1.setAlignment(QtCore.Qt.AlignCenter)
         self.Task_1.setObjectName("Task_1")
@@ -771,12 +776,11 @@ class Landing(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.Task_2.setFont(font)
-        self.Task_2.setStyleSheet("background-color: #071e26;\n"
-"border:1px solid white;\n"
-"border-radius:5px;\n"
+        self.Task_2.setStyleSheet("background-color: white;\n"
+"border:5px solid white;\n"
+"border-radius:7px;\n"
 "font-family:Times New Roman;\n"
-
-
+"color:Black;\n"
 "font-weight:600;")
         self.Task_2.setAlignment(QtCore.Qt.AlignCenter)
         self.Task_2.setObjectName("Task_2")
@@ -788,12 +792,11 @@ class Landing(QMainWindow):
         font.setBold(True)
         font.setWeight(75)
         self.Task_3.setFont(font)
-        self.Task_3.setStyleSheet("background-color: #071e26;\n"
-"border:1px solid white;\n"
-"border-radius:5px;\n"
+        self.Task_3.setStyleSheet("background-color: white;\n"
+"border:5px solid white;\n"
+"border-radius:7px;\n"
 "font-family:Times New Roman;\n"
-
-
+"color:Black;\n"
 "font-weight:600;")
         self.Task_3.setAlignment(QtCore.Qt.AlignCenter)
         self.Task_3.setObjectName("Task_3")
@@ -812,7 +815,27 @@ class Landing(QMainWindow):
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.extra_frame)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
        
-       
+        if uncompleted_tasks:
+                if len(uncompleted_tasks) >= 1:
+                    self.Task_1.setText(uncompleted_tasks[0][0])  # Access the first element of the tuple
+                else:
+                    self.Task_1.setText("No Tasks for today")
+
+                if len(uncompleted_tasks) >= 2:
+                    self.Task_2.setText(uncompleted_tasks[1][0])  # Access the first element of the tuple
+                else:
+                    self.Task_2.setText("No Other Tasks for today")
+
+                if len(uncompleted_tasks) >= 3:
+                    self.Task_3.setText(uncompleted_tasks[2][0])  # Access the first element of the tuple
+                else:
+                    self.Task_3.setText("No Other Tasks for today")
+        else:
+            # If there are no uncompleted tasks
+            self.Task_1.setText("No Tasks for today")
+            self.Task_2.setText("No Tasks for today")
+            self.Task_3.setText("No Tasks for today")
+            
        
         self.lcdNumber = QtWidgets.QLCDNumber(self.extra_frame)
         self.lcdNumber.setMinimumSize(QtCore.QSize(0, 120))
