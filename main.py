@@ -1509,31 +1509,7 @@ class Reminder(QMainWindow):
             self.central_widget_animation.setEndValue(QtCore.QRect(0, 0, 586, 370))
         self.central_widget_animation.start()
 
-
-    def sendNotification(self, title, message):
-        notification.notify(
-            title=title,
-            message=message,
-            timeout=1
-        )
-
-
-
-
-    def checkTasksAndSendNotification(self):
-        today_date = QDate.currentDate().toString("yyyy-MM-dd")
-        query = "SELECT task FROM tasks WHERE date = ? AND completed = 'NO'"
-        row = (today_date,)
-        tasks = self.cursor.execute(query, row).fetchall()
-
-
-        if tasks:
-            for task in tasks:
-                self.sendNotification("Task Notification", task[0])
-                time.sleep(3)
-    def sendInitialNotifications(self):
-       
-        QTimer.singleShot(10000, self.checkTasksAndSendNotification)
+    
                    
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
