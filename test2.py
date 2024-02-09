@@ -1,12 +1,11 @@
 import sqlite3
 import pygetwindow as gw
 import time
-import datetime
 from pywinauto import Application
-from plyer import notification
-
+import datetime
+from naya import timeliner
 class ScreenTimeTracker:
-    def __init__(self, db_name=r'C:\Users\LENOVO\Desktop\samdhan\Samadhan-App\app_screen_time.db'):
+    def __init__(self, db_name=r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db'):
         self.conn = sqlite3.connect(db_name)
         self.create_table()
 
@@ -17,56 +16,36 @@ class ScreenTimeTracker:
                             total_screen_time REAL,
                             Day TEXT
                         )''')
-        cursor.execute('''CREATE TABLE IF NOT EXISTS timeline (
-                            app_name TEXT ,
-                            time_opened datetime,
-                            time_closed datetime,
-                            Day TEXT
-                        )''')
-
-    def record_start_time(self, tab_name, current_time, present_day):
-        cursor = self.conn.cursor()
-        cursor.execute("INSERT INTO timeline (app_name, time_opened, Day) VALUES (?, ?, ?)",
-                    (tab_name, current_time, present_day))
-        self.conn.commit()
-        cursor.close()
-
-    def record_end_time(self, tab_name, current_time):
-        cursor = self.conn.cursor()
-        cursor.execute("UPDATE timeline SET time_closed=? WHERE app_name=? AND time_closed IS NULL",
-                    (current_time, tab_name))
-        self.conn.commit()
-        cursor.close()
-
+        
+    
     def get_total_screen_time_today(self, present_day):
         cursor = self.conn.cursor()
         cursor.execute("SELECT SUM(total_screen_time) FROM screen_time WHERE Day=?", (present_day,))
         total_screen_time_today = cursor.fetchone()[0]
         return total_screen_time_today
 
+       
     def track_and_store_screen_time(self):
-        self.record_start_time("Program Start", datetime.datetime.now().strftime("%H:%M:%S"), datetime.datetime.now().strftime("%A"))
-
         active_window = gw.getActiveWindow()
         now = datetime.datetime.now()
         present_day = now.strftime("%A")
         current_time = now.strftime("%H:%M:%S")
-        notification_sent = False
-
         while True:
+            timeliner()
             active_window = gw.getActiveWindow()
             if active_window is not None:
                 app_name = active_window.title
                 if app_name != 'Main Window':  # Exclude details about the PyQt window
                     if "Google Chrome" in app_name or "Firefox" in app_name or "Microsoft Edge" in app_name:
-                        tab_name = self.get_browser_tab_name(active_window)
+                        tab_name = self.get_browser_tab_name(active_window)        
                     else:
                         tab_name = app_name.split("-")[-1].strip()
 
                     cursor = self.conn.cursor()
                     try:
+                        # Check if a row exists for the current tab_name and present_day
                         cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=? AND Day=?",
-                                (tab_name, present_day))
+                                    (tab_name, present_day))
                         row = cursor.fetchone()
 
                         if row:
@@ -78,30 +57,32 @@ class ScreenTimeTracker:
                             # If the row doesn't exist, insert a new row for the current tab_name and present_day
                             cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
                                         (tab_name, 1, present_day))
-                            # Commit changes to the database
-                            self.conn.commit()
+
+                        
+                        
+                        self.conn.commit()
                     finally:
                         cursor.close()
 
             time.sleep(1)  # Track every second
-
-            self.record_end_time("Program End", datetime.datetime.now().strftime("%H:%M:%S"))
+        # Track every second
 
     def get_browser_tab_name(self, window):
         title = window.title
-    
+        
         if " - Google Chrome" in title:
+
             if "- YouTube" in title:
                 tab_name="Youtube"
                 return tab_name
-            else:  
+            else:   
                 app = Application(backend='uia')
                 app.connect(title_re=".*Chrome.*", found_index=0)
                 element_name="Address and search bar"
                 dlg = app.top_window()
                 url = dlg.child_window(title=element_name, control_type="Edit").get_value()
                 if "localhost" in url:
-                    tab_name="localhost Server"
+                    tab_name="localhost Server" 
                     return tab_name
                 else:
                     tab_name= url.split(".com")[0]
@@ -133,13 +114,13 @@ class ScreenTimeTracker:
                     tab_name=url.split('www.')[1].split('.com')[0]
                     return tab_name
                 elif ".com" in url:
-                    tab_name=url.split('.com')[0].split('https://')[1]
-                    return tab_name     
+                    tab_name=url.split('.com')[0].split('https://')[1] 
+                    return tab_name   
                 else:
                     tab_name='new tab'
                     return tab_name    
         else:
-            return title
+            return title   
 
 def main():
     tracker = ScreenTimeTracker()

@@ -5,7 +5,7 @@ from pywinauto import Application
 import datetime
 
 class ScreenTimeTracker:
-    def __init__(self, db_name=r'C:\Users\LENOVO\Desktop\samdhan\Samadhan-App\app_screen_time.db'):
+    def __init__(self, db_name=r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db'):
         self.conn = sqlite3.connect(db_name)
         self.create_table()
 
@@ -16,9 +16,8 @@ class ScreenTimeTracker:
                             total_screen_time REAL,
                             Day TEXT
                         )''')
-        
         cursor.execute('''CREATE TABLE IF NOT EXISTS timeline (
-                           
+                            app_name TEXT ,
                             time_opened datetime,
                             time_closed datetime,
                             Day
@@ -32,29 +31,11 @@ class ScreenTimeTracker:
 
        
     def track_and_store_screen_time(self):
-        cursor = self.conn.cursor()
-
         active_window = gw.getActiveWindow()
         now = datetime.datetime.now()
         present_day = now.strftime("%A")
         current_time = now.strftime("%H:%M:%S")
-        initial_time = datetime.datetime.now().replace(microsecond=0)
-        current_time = initial_time
-        cursor.execute('''INSERT INTO timeline (time_opened, time_closed, Day)
-                  VALUES (?, ?, ?)''', ( initial_time, current_time, current_time.strftime('%A')))
-        self.conn.commit()
-
         while True:
-            current_time = datetime.datetime.now().replace(microsecond=0)
-            print('hello')
-            cursor.execute('''UPDATE timeline SET time_closed =? WHERE time_opened =? ''',
-                        (current_time, initial_time))
-            print(current_time)
-            # Save (commit) the changes
-            self.conn.commit()
-            time.sleep(1)  # Wait for 1 second before the next update
-
-           
             active_window = gw.getActiveWindow()
             if active_window is not None:
                 app_name = active_window.title
@@ -64,23 +45,37 @@ class ScreenTimeTracker:
                     else:
                         tab_name = app_name.split("-")[-1].strip()
 
-                
-                    # Check if a row exists for the current tab_name and present_day
-                    cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=? AND Day=?",
-                                (tab_name, present_day))
-                    row = cursor.fetchone()
+                    cursor = self.conn.cursor()
+                    try:
+                        # Check if a row exists for the current tab_name and present_day
+                        cursor.execute("SELECT total_screen_time FROM screen_time WHERE app_name=? AND Day=?",
+                                    (tab_name, present_day))
+                        row = cursor.fetchone()
 
-                    if row:
-                        # If the row exists, update the screen time in that row
-                        total_time = row[0] + 1  # Update every second
-                        cursor.execute("UPDATE screen_time SET total_screen_time=? WHERE app_name=? AND Day=?",
-                                    (total_time, tab_name, present_day))
-                    else:
-                        # If the row doesn't exist, insert a new row for the current tab_name and present_day
-                        cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
-                                    (tab_name, 1, present_day))
+                        if row:
+                            # If the row exists, update the screen time in that row
+                            total_time = row[0] + 1  # Update every second
+                            cursor.execute("UPDATE screen_time SET total_screen_time=? WHERE app_name=? AND Day=?",
+                                        (total_time, tab_name, present_day))
+                        else:
+                            # If the row doesn't exist, insert a new row for the current tab_name and present_day
+                            cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
+                                        (tab_name, 1, present_day))
 
-                    
+                        # Check if a timeline entry exists for the current tab_name and if it's not closed yet
+                        cursor.execute("SELECT * FROM timeline WHERE app_name=? AND time_closed IS NULL", (tab_name,))
+                        row = cursor.fetchone()
+
+                        if row:
+                            cursor.execute("UPDATE timeline SET time_closed=? WHERE app_name=? AND time_closed IS NULL",
+                                        (current_time, tab_name))
+                        else:
+                            cursor.execute("INSERT INTO timeline (app_name, time_opened, Day) VALUES (?, ?, ?)",
+                                        (tab_name, current_time, present_day))
+
+                        self.conn.commit()
+                    finally:
+                        cursor.close()
 
             time.sleep(1)  # Track every second
         # Track every second
