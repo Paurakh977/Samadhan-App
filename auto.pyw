@@ -3,9 +3,9 @@ import pygetwindow as gw
 import time
 from pywinauto import Application
 import datetime
-
+from naya import timeliner
 class ScreenTimeTracker:
-    def __init__(self, db_name=r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db'):
+    def __init__(self, db_name='app_screen_time.db'):
         self.conn = sqlite3.connect(db_name)
         self.create_table()
 
@@ -16,12 +16,7 @@ class ScreenTimeTracker:
                             total_screen_time REAL,
                             Day TEXT
                         )''')
-        cursor.execute('''CREATE TABLE IF NOT EXISTS timeline (
-                            app_name TEXT ,
-                            time_opened datetime,
-                            time_closed datetime,
-                            Day
-                        )''')
+        
     
     def get_total_screen_time_today(self, present_day):
         cursor = self.conn.cursor()
@@ -36,6 +31,7 @@ class ScreenTimeTracker:
         present_day = now.strftime("%A")
         current_time = now.strftime("%H:%M:%S")
         while True:
+            timeliner()
             active_window = gw.getActiveWindow()
             if active_window is not None:
                 app_name = active_window.title
@@ -62,17 +58,8 @@ class ScreenTimeTracker:
                             cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
                                         (tab_name, 1, present_day))
 
-                        # Check if a timeline entry exists for the current tab_name and if it's not closed yet
-                        cursor.execute("SELECT * FROM timeline WHERE app_name=? AND time_closed IS NULL", (tab_name,))
-                        row = cursor.fetchone()
-
-                        if row:
-                            cursor.execute("UPDATE timeline SET time_closed=? WHERE app_name=? AND time_closed IS NULL",
-                                        (current_time, tab_name))
-                        else:
-                            cursor.execute("INSERT INTO timeline (app_name, time_opened, Day) VALUES (?, ?, ?)",
-                                        (tab_name, current_time, present_day))
-
+                        
+                        
                         self.conn.commit()
                     finally:
                         cursor.close()

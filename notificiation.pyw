@@ -3,9 +3,10 @@ from PyQt5.QtCore import QTimer
 import sqlite3,time
 from plyer import notification
 from main import PieChartEmailSender
-conn = sqlite3.connect(r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db')
+conn = sqlite3.connect('app_screen_time.db')
 cursor = conn.cursor()
-
+cursor.execute("SELECT email FROM users LIMIT 1")
+reciver_email= cursor.fetchone()[0]
 def sendNotification(task):
     notification.notify(
         title=f"{task}",
@@ -47,17 +48,18 @@ def checkScreenTimeAndSendNotification():
     if total_screen_time_records:
         total_screen_time_today = sum(record[0] for record in total_screen_time_records)
         total_screen_time_today_hours = seconds_to_hours(total_screen_time_today)
-        if total_screen_time_today_hours > 4:  # 4 hours
+        if total_screen_time_today_hours > 2:  # 4 hours
             message = f"your screen time today reached : {int(total_screen_time_today_hours)} hours\n please take a break"
             
             sendNotification_for_screen_time(message.title())
 
 
 while True:
+    
     checkScreenTimeAndSendNotification()
-    time.sleep(10)
+    time.sleep(5)
     sendFirstNotification()
-    time.sleep(3600)
-    pc = PieChartEmailSender()
+    time.sleep(5)
+    pc = PieChartEmailSender(reciver_email)
     pc.send_email_with_attachment()
     time.sleep(30)    
