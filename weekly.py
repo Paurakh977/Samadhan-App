@@ -43,7 +43,6 @@ class Weekly(QMainWindow):
         super(Weekly, self).__init__()
         self.setupUi(self)
        
-       
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(586, 455)
@@ -380,8 +379,7 @@ class Weekly(QMainWindow):
         layout = QtWidgets.QVBoxLayout(self.bar_graph_frame)  # Create a layout for bar_graph_frame
         layout.addWidget(self.canvas)  # Add the canvas widget to the layout
         self.ani = animation.FuncAnimation(self.fig, self.update_plot, interval=1000)  # Fix method name
-
-         
+   
     def format_time(self, seconds):
         if seconds >= 3600:
             hours = seconds // 3600
@@ -392,9 +390,6 @@ class Weekly(QMainWindow):
             return f"{minutes}m"
         else:
             return f"{seconds}s"
-
-
-
 
     def get_screen_time_per_day(self):
         cursor = self.conn.cursor()
@@ -425,7 +420,6 @@ class Weekly(QMainWindow):
         data = cursor.fetchall()
         return data
 
-
     def update_plot(self, i):
         self.ax.clear()
         data = self.get_screen_time_per_day()
@@ -441,12 +435,10 @@ class Weekly(QMainWindow):
         for x, y, label in zip(days, total_screen_time, formatted_times):
             self.ax.text(x, y, label, ha='center', va='bottom')
 
-
     def animate(self):
         ani = animation.FuncAnimation(self.fig, self.update_plot, interval=1000)
         plt.show()
-    
-       
+         
     def plot_most_used_apps_pie(self):
         conn = sqlite3.connect('app_screen_time.db')
         cursor = conn.cursor()
