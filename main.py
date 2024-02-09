@@ -495,7 +495,7 @@ class SignupWindow(QMainWindow):
         self.username.setPlaceholderText(_translate("MainWindow", "Username"))
         self.email.setPlaceholderText(_translate("MainWindow", "Email"))
         self.password.setPlaceholderText(_translate("MainWindow", "Password"))
-        self.Login_button.setText(_translate("MainWindow", "Login"))
+        self.Login_button.setText(_translate("MainWindow", "Signup"))
 
 class Landing(QMainWindow):
     
