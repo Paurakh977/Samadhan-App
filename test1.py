@@ -28,15 +28,12 @@ def daily_summary():
         print(f"No data found for {current_day}")
     
     
-
-    query = '''
-    SELECT app_name, SUM(total_screen_time) AS total_time
-    FROM screen_time
-    WHERE Day = ?
-    GROUP BY app_name
-    ORDER BY total_time DESC
+    query = """
+    SELECT * FROM screen_time where Day = ? 
+    group by app_name 
+    order by total_screen_time DESC
     LIMIT 10;
-'''
+    """
 
     # Execute the query with the current day as a parameter
     cursor.execute(query, (current_day,))
@@ -45,13 +42,17 @@ def daily_summary():
     # Print the top 10 results
     if results:
         print("Top 10 most used apps:")
-        for app, total_time in results:
-            if total_time > 60:
-                hours = int(total_time / 60)
-                minutes = int(total_time % 60)
+        for app, total_time, day in results:
+            if total_time >= 3600:
+                hours = total_time // 3600
+                minutes = (total_time % 3600) // 60
                 print(f"{app}: {hours}h {minutes}m")
+            elif total_time >= 60:
+                minutes = total_time // 60
+                print(f"{app}:  {minutes}m")
             else:
-                print(f"{app}: {total_time} minutes")
+                print( f"{total_time}s")
+        
     else:
         print(f"No screen time data found for {current_day}")
 
