@@ -2,7 +2,7 @@ from datetime import datetime
 from PyQt5.QtCore import QTimer
 import sqlite3,time
 from plyer import notification
-
+from main import PieChartEmailSender
 conn = sqlite3.connect(r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db')
 cursor = conn.cursor()
 
@@ -58,3 +58,6 @@ while True:
     time.sleep(10)
     sendFirstNotification()
     time.sleep(3600)
+    pc = PieChartEmailSender()
+    pc.send_email_with_attachment()
+    time.sleep(30)    

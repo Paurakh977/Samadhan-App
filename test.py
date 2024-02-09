@@ -12,10 +12,12 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
-
+import datetime
 class PieChartEmailSender:
     def __init__(self, receiver_email):
         self.receiver_email = receiver_email
+        self.conn = sqlite3.connect('app_screen_time.db')  # Establish database connection
+
 
     def format_time(self, seconds):
         if seconds >= 3600:
@@ -83,12 +85,12 @@ class PieChartEmailSender:
 
     def send_email_with_attachment(self):
         daily_pie_chart = self.plot_most_used_apps_pie()
-        weekly_line_graph = self.setupLineGraph()  # Get the weekly line graph stream
+        weekly_line_graph = self.setupLineGraph()  
 
         # Set up email parameters
         sender_email = "pandeypaurakhraj@gmail.com"
-        subject = "Pie Chart Report"
-        body = "Please find attached the pie chart report."
+        subject = "App Usage Report"
+        body = "Your weekly app usage report."
 
         # Create a message container - the correct MIME type is multipart/alternative
         msg = MIMEMultipart()
@@ -126,6 +128,8 @@ class PieChartEmailSender:
     # Open the database connection
         conn = sqlite3.connect('app_screen_time.db')
         cursor = conn.cursor()
+        self.fig, self.ax = plt.subplots()
+
 
         top_3_apps = self.get_top_3_apps(cursor)  # Pass the cursor to get_top_3_apps method
         days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -167,12 +171,63 @@ class PieChartEmailSender:
         conn.close()
 
         return image_stream
+    
+    def get_screen_time_per_day(self):
+        cursor = self.conn.cursor()  # Use the connection attribute
+
+        conn = sqlite3.connect('app_screen_time.db')
+
+        cursor = conn.cursor()
+
+        # Get the current day of the week
+        today = datetime.datetime.today().strftime('%A')
+
+        # Define the order of days starting from Sunday
+        days_order = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+        # Find the index of the first available day in the database
+        first_day_index = days_order.index(today)
+
+        # Reorder the days to start from the first available day
+        reordered_days = days_order[first_day_index:] + days_order[:first_day_index]
+
+        # Generate the ORDER BY clause based on the reordered days
+        order_by_clause = 'CASE Day '
+
+        for i, day in enumerate(reordered_days, start=1):
+            order_by_clause += f'WHEN \'{day}\' THEN {i} '
+
+        order_by_clause += 'END'
+
+        # Execute the SQL query with the dynamically generated ORDER BY clause
+        cursor.execute(f"SELECT Day, SUM(total_screen_time) FROM screen_time GROUP BY Day ORDER BY {order_by_clause}")
+
+        data = cursor.fetchall()
+        return data
 
     def get_top_3_apps(self, cursor):
         cursor.execute("SELECT app_name, SUM(total_screen_time) AS total_time FROM screen_time GROUP BY app_name ORDER BY total_time DESC LIMIT 3")
         top_3_apps = cursor.fetchall()
         return top_3_apps
-    
+   
+    def setupBarGraphAnimation(self):
+        fig, ax = plt.subplots()
+        self.ax.clear()
+        data = self.get_screen_time_per_day()
+        days = [row[0] for row in data]
+        total_screen_time = [row[1] for row in data]
+        formatted_times = [self.format_time(time) for time in total_screen_time]
+        self.ax.bar(days, total_screen_time, color='skyblue', width=0.6)  # Adjust width as per your preference
+        self.ax.set_xlabel('Day of the Week')
+        self.ax.set_ylabel('Total Screen Time')
+        self.ax.set_title('Total Screen Time per Day')
+        self.ax.grid(alpha=0.5)
+        for x, y, label in zip(days, total_screen_time, formatted_times):
+            self.ax.text(x, y, label, ha='center', va='bottom')
+        image_stream = BytesIO()
+        fig.savefig(image_stream, format='png')
+        image_stream.seek(0)  # Reset the stream position to the beginning
+
 if __name__ == "__main__":
     sender = PieChartEmailSender(receiver_email="pandeypaurakhraj@gmail.com")
     sender.plot_most_used_apps_pie()
