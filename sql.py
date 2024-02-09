@@ -13,9 +13,7 @@ def run_sql_code(sql_code, db_name):
         conn.close()
 
 # Example SQL code
-sql_code = """
-DELETE FROM timeline
-
+sql_code = """DELETE FROM timeline
 """
 
 # Replace 'your_database_name.db' with the actual name of your SQLite database file

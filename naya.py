@@ -7,12 +7,12 @@ conn = sqlite3.connect(r'C:\Users\LENOVO\Desktop\samdhan\Samadhan-App\app_screen
 cursor = conn.cursor()
 
 # Get the current time without milliseconds
-initial_time = datetime.datetime.now().replace(microsecond=0)
+initial_time = datetime.datetime.now().strftime('%I:%M:%S %p')
 current_time = initial_time
-
+today = datetime.datetime.now().strftime('%A')
 # Insert the current time as time_opened and time_closed
 cursor.execute('''INSERT INTO timeline (time_opened, time_closed, Day)
-                  VALUES (?, ?, ?)''', (initial_time, current_time, current_time.strftime('%A')))
+                  VALUES (?, ?, ?)''', (initial_time, current_time, today))
 
 # Save (commit) the changes
 conn.commit()
@@ -20,8 +20,7 @@ conn.commit()
 def timeliner():
     try:
         # Update time_closed every second
-        current_time = datetime.datetime.now().replace(microsecond=0)
-        print('hello')
+        current_time = datetime.datetime.now().strftime('%I:%M:%S %p')
         cursor.execute('''UPDATE timeline SET time_closed =? WHERE time_opened =? ''',
                        (current_time, initial_time))
         print(current_time)

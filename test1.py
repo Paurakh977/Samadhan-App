@@ -14,8 +14,8 @@ def daily_summary():
     '''
 
     cursor.execute(query, (current_day,))
-    result = cursor.fetchone()
     
+    result = cursor.fetchone()
 
     if result:
         least_time_opened, greatest_time_closed = result
@@ -32,7 +32,7 @@ def daily_summary():
     SELECT * FROM screen_time where Day = ? 
     group by app_name 
     order by total_screen_time DESC
-    LIMIT 10;
+    LIMIT 5;
     """
 
     # Execute the query with the current day as a parameter
@@ -41,23 +41,29 @@ def daily_summary():
 
     # Print the top 10 results
     if results:
-        print("Top 10 most used apps:")
+        print("Top 5 most used apps:")
+        application = []
+        time = []
         for app, total_time, day in results:
+            application.append(app)
             if total_time >= 3600:
                 hours = total_time // 3600
                 minutes = (total_time % 3600) // 60
-                print(f"{app}: {hours}h {minutes}m")
+                app_time = f"{hours}h {minutes}m"
+                time.append(app_time)
             elif total_time >= 60:
                 minutes = total_time // 60
-                print(f"{app}:  {minutes}m")
+                app_time = f"{minutes}m"
+                time.append(app_time)
             else:
-                print( f"{total_time}s")
+                app_time = f"{total_time}s"
+                time.append(app_time)
         
     else:
         print(f"No screen time data found for {current_day}")
 
     # Close the connection
     conn.close()
+    return application, time, greatest_time_closed,least_time_opened
 
-
-daily_summary()
+print(daily_summary()[2])
