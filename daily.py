@@ -1,19 +1,11 @@
-<<<<<<< HEAD
-=======
 import datetime
->>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
 from PyQt5 import QtCore, QtGui, QtWidgets
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-<<<<<<< HEAD
-from matplotlib.animation import FuncAnimation
-
-=======
 from matplotlib.patches import Circle
 from matplotlib.animation import FuncAnimation
 import numpy as np
->>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
 class daily_report(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -244,16 +236,6 @@ class daily_report(object):
         self.main_body.setObjectName("main_body")
         self.gridLayout = QtWidgets.QGridLayout(self.main_body)
         self.gridLayout.setObjectName("gridLayout")
-<<<<<<< HEAD
-        self.other_frame = QtWidgets.QFrame(self.main_body)
-        self.other_frame.setMaximumSize(QtCore.QSize(450, 16777215))
-        self.other_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-                                       "border-radius:7px;")
-        self.other_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.other_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.other_frame.setObjectName("other_frame")
-        self.gridLayout.addWidget(self.other_frame, 0, 1, 1, 1)
-=======
         self.bar_graph_frame = QtWidgets.QFrame(self.main_body)
         self.bar_graph_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
                                             "border-radius:7px;")
@@ -261,7 +243,6 @@ class daily_report(object):
         self.bar_graph_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.bar_graph_frame.setObjectName("bar_graph_frame")
         self.gridLayout.addWidget(self.bar_graph_frame, 0, 1, 1, 1)
->>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
         self.pie_chart_frame = QtWidgets.QFrame(self.main_body)
         self.pie_chart_frame.setStyleSheet("background-color: rgb(255, 255, 255);\n"
                                             "border-radius:7px;")
@@ -282,46 +263,6 @@ class daily_report(object):
         self.pie_chart_canvas = FigureCanvas(plt.figure())
         self.gridLayoutPie = QtWidgets.QGridLayout(self.pie_chart_frame)
         self.gridLayoutPie.addWidget(self.pie_chart_canvas)
-<<<<<<< HEAD
-
-        self.ani = FuncAnimation(self.pie_chart_canvas.figure, self.update_plot, interval=1000)
-
-    def update_plot(self, i):
-        data = self.get_data()
-
-        apps = [row[0] for row in data]
-        counts = [row[1] for row in data]
-
-        total_count = sum(counts)
-        apps_to_include = []
-        counts_to_include = []
-        others_count = 0
-
-        for app, count in zip(apps, counts):
-            if count / total_count >= 0.05:
-                apps_to_include.append(app)
-                counts_to_include.append(count)
-            else:
-                others_count += count
-
-        if others_count > 0:
-            apps_to_include.append("Others")
-            counts_to_include.append(others_count)
-
-        ax = self.pie_chart_canvas.figure.gca()
-        ax.clear()
-        ax.pie(counts_to_include, labels=apps_to_include, autopct='%1.1f%%', startangle=90)
-        ax.axis('equal')
-        ax.set_title('Your Most Used Apps', pad=20)
-
-    def get_data(self):
-        conn = sqlite3.connect('app_screen_time.db')
-        cursor = conn.cursor()
-        cursor.execute("SELECT app_name, COUNT(*) FROM timeline GROUP BY app_name")
-        data = cursor.fetchall()
-        return data
-
-=======
         
         self.conn = sqlite3.connect('app_screen_time.db')
         self.cursor = self.conn.cursor()
@@ -379,7 +320,6 @@ class daily_report(object):
         else:
             return f"{int(seconds)} sec"
     
->>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -401,7 +341,3 @@ if __name__ == "__main__":
     ui.setupUi(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-<<<<<<< HEAD
-
-=======
->>>>>>> 61c4f9b925991a908c106da378e1746e42f10e93
