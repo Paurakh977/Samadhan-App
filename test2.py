@@ -5,7 +5,7 @@ from pywinauto import Application
 import datetime
 from naya import timeliner
 class ScreenTimeTracker:
-    def __init__(self, db_name=r'C:\Users\pande\OneDrive\Desktop\dkc\app_screen_time.db'):
+    def __init__(self, db_name=r'C:\Users\LENOVO\Desktop\samdhan\Samadhan-App\app_screen_time.db'):
         self.conn = sqlite3.connect(db_name)
         self.create_table()
 

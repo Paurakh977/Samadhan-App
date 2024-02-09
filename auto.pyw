@@ -3,7 +3,7 @@ import pygetwindow as gw
 import time
 from pywinauto import Application
 import datetime
-
+from naya import timeliner
 class ScreenTimeTracker:
     def __init__(self, db_name=r'C:\Users\LENOVO\Desktop\samdhan\Samadhan-App\app_screen_time.db'):
         self.conn = sqlite3.connect(db_name)
@@ -16,12 +16,7 @@ class ScreenTimeTracker:
                             total_screen_time REAL,
                             Day TEXT
                         )''')
-        cursor.execute('''CREATE TABLE IF NOT EXISTS timeline (
-                            app_name TEXT ,
-                            time_opened datetime,
-                            time_closed datetime,
-                            Day
-                        )''')
+        
     
     def get_total_screen_time_today(self, present_day):
         cursor = self.conn.cursor()
@@ -36,6 +31,7 @@ class ScreenTimeTracker:
         present_day = now.strftime("%A")
         current_time = now.strftime("%H:%M:%S")
         while True:
+            timeliner()
             active_window = gw.getActiveWindow()
             if active_window is not None:
                 app_name = active_window.title
@@ -62,6 +58,9 @@ class ScreenTimeTracker:
                             cursor.execute("INSERT INTO screen_time (app_name, total_screen_time, Day) VALUES (?, ?, ?)",
                                         (tab_name, 1, present_day))
 
+                        
+                        
+                        self.conn.commit()
                     finally:
                         cursor.close()
 

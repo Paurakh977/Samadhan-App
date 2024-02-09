@@ -18,7 +18,7 @@ cursor.execute('''INSERT INTO timeline (time_opened, time_closed, Day)
 conn.commit()
 
 def timeliner():
-    try:
+   
         # Update time_closed every second
         current_time = datetime.datetime.now().strftime('%I:%M:%S %p')
         cursor.execute('''UPDATE timeline SET time_closed =? WHERE time_opened =? ''',
@@ -27,12 +27,10 @@ def timeliner():
         # Save (commit) the changes
         conn.commit()
         time.sleep(1)  # Wait for 1 second before the next update
-    except KeyboardInterrupt:
-        pass  # Catch Ctrl+C to exit the loop
+    
 
 if __name__=='__main__':
     while True:
         timeliner()
 
-# Close the connection after exiting the loop
-conn.close()
+
